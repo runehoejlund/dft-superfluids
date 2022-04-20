@@ -1,5 +1,18 @@
+# Auto generated files and directories from queueing system
+*.err
+*.out
+error_logs/
+**.myqueue/
+
+# gpaw
+*.gpw
+*.npz
+
 # playground
 playground/
+
+# VSCode
+.vscode/
 
 # Byte-compiled / optimized / DLL files
 #
