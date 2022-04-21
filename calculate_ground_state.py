@@ -12,7 +12,7 @@ def calculate_ground_state(formula):
     # print('Size of structure file:')
     # print(os.path.getsize('./structures/' + formula + '.json'))
     structure = read('./structures/' + formula + '.json')
-    structure.pbc = (1, 1, 1)
+    # structure.pbc = (1, 1, 1)
 
     ecut = 600
 

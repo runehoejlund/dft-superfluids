@@ -4,6 +4,7 @@ def calculate_building_block(formula):
     from gpaw.response.df import DielectricFunction
     from gpaw.response.qeh import BuildingBlock
 
+    # chi
     df = DielectricFunction(calc=formula + '_gs_fulldiag.gpw',
                         eta=0.001,
                         domega0=0.05,
@@ -16,5 +17,5 @@ def calculate_building_block(formula):
 
     buildingblock.calculate_building_block()
 
-    if world.rank == 0:
-        Path(formula + '_gs_fulldiag.gpw').unlink()
+    # if world.rank == 0:
+    #     Path(formula + '_gs_fulldiag.gpw').unlink()

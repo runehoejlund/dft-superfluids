@@ -10,6 +10,10 @@ pip install -r requirements.txt
 ```
 
 ## Usefull commands specific to the dtu gbar hpc environment
+### Load in intel compiler module
+```
+module add intel
+```
 ### Queuing tasks/jobs
 Navigate to repo folder on gbar. Then you can run the following:
 - Submit job on 8 cores for 4 hours

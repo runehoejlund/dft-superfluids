@@ -278,4 +278,77 @@ Notice: Up to twice the amount of memory might be allocated
 during diagonalization algorithm.
 The least memory is required when the parallelization is purely
 over states (bands) and not k-points, set GPAW(..., parallel={'kpt': 1}, ...).
-7395.516768217087s |--
+7395.516768217087s |----------------------------------------| Time: 7077.197s
+Writing to MoS2_gs_fulldiag.gpw (mode='all')
+
+Timing:                              incl.     excl.
+-----------------------------------------------------------
+Full diag:                        7077.997     1.409   0.0% |
+ Build H and S:                    326.336   326.336   4.5% |-|
+ Diagonalize:                     6749.226  6749.226  92.1% |------------------------------------|
+ Projections:                        1.023     1.023   0.0% |
+ Redistribute:                       0.004     0.004   0.0% |
+Hamiltonian:                         0.139     0.002   0.0% |
+ Atomic:                             0.034     0.034   0.0% |
+  XC Correction:                     0.000     0.000   0.0% |
+ Calculate atomic Hamiltonians:      0.014     0.014   0.0% |
+ Communicate:                        0.021     0.021   0.0% |
+ Initialize Hamiltonian:             0.000     0.000   0.0% |
+ Poisson:                            0.003     0.003   0.0% |
+ XC 3D grid:                         0.065     0.065   0.0% |
+LCAO initialization:                 1.579     0.202   0.0% |
+ LCAO eigensolver:                   0.150     0.001   0.0% |
+  Calculate projections:             0.001     0.001   0.0% |
+  DenseAtomicCorrection:             0.002     0.002   0.0% |
+  Distribute overlap matrix:         0.000     0.000   0.0% |
+  Orbital Layouts:                   0.006     0.006   0.0% |
+  Potential matrix:                  0.136     0.136   0.0% |
+  Sum over cells:                    0.004     0.004   0.0% |
+ LCAO to grid:                       1.099     1.099   0.0% |
+ Set positions (LCAO WFS):           0.128     0.019   0.0% |
+  Basic WFS set positions:           0.001     0.001   0.0% |
+  Basis functions set positions:     0.000     0.000   0.0% |
+  P tci:                             0.055     0.055   0.0% |
+  ST tci:                            0.043     0.043   0.0% |
+  mktci:                             0.009     0.009   0.0% |
+PWDescriptor:                        0.243     0.243   0.0% |
+SCF-cycle:                          82.940     0.290   0.0% |
+ Davidson:                          73.450    10.109   0.1% |
+  Apply H:                          12.560    12.040   0.2% |
+   HMM T:                            0.520     0.520   0.0% |
+  Subspace diag:                    15.315     0.049   0.0% |
+   calc_h_matrix:                   13.940     1.429   0.0% |
+    Apply H:                        12.511    11.976   0.2% |
+     HMM T:                          0.535     0.535   0.0% |
+   diagonalize:                      0.120     0.120   0.0% |
+   rotate_psi:                       1.205     1.205   0.0% |
+  calc. matrices:                   32.759     7.700   0.1% |
+   Apply H:                         25.059    24.023   0.3% |
+    HMM T:                           1.036     1.036   0.0% |
+  diagonalize:                       0.556     0.556   0.0% |
+  rotate_psi:                        2.152     2.152   0.0% |
+ Density:                            6.842     0.001   0.0% |
+  Atomic density matrices:           0.049     0.049   0.0% |
+  Mix:                               0.680     0.680   0.0% |
+  Multipole moments:                 0.003     0.003   0.0% |
+  Pseudo density:                    6.110     5.635   0.1% |
+   Symmetrize density:               0.475     0.475   0.0% |
+ Hamiltonian:                        2.192     0.031   0.0% |
+  Atomic:                            0.447     0.447   0.0% |
+   XC Correction:                    0.000     0.000   0.0% |
+  Calculate atomic Hamiltonians:     0.357     0.357   0.0% |
+  Communicate:                       0.002     0.002   0.0% |
+  Poisson:                           0.051     0.051   0.0% |
+  XC 3D grid:                        1.305     1.305   0.0% |
+ Orthonormalize:                     0.166     0.002   0.0% |
+  calc_s_matrix:                     0.036     0.036   0.0% |
+  inverse-cholesky:                  0.003     0.003   0.0% |
+  projections:                       0.093     0.093   0.0% |
+  rotate_psi_s:                      0.031     0.031   0.0% |
+Set symmetry:                        0.039     0.039   0.0% |
+Other:                             161.332   161.332   2.2% ||
+-----------------------------------------------------------
+Total:                                      7324.269 100.0%
+
+Memory usage: 5.72 GiB
+Date: Wed Apr 20 17:48:38 2022
