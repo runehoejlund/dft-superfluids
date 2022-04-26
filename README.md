@@ -74,3 +74,34 @@ Open new terminal locally and run (USERNAME: your DTU username, HOSTNAME: server
 ssh USERNAME@login.gbar.dtu.dk -g -L8080:HOSTNAME:PORT -N
 ```
 Go into your browser and open: http://localhost:8080. When you are creating a new note notebook on the web browser, go to “new” and then choose the name of your virtual environment to make it work. If you already have written the notebook, just go to “kernel” -> “change kernel” and choose your respective environment.
+
+### Git Commands
+Note: You need to have cloned the repo and logged in with git to run the following commands. Checkout a beginner's guide to git, if you are unfamiliar with it.
+- Check which files/folders have been modified.
+```
+git status
+```
+- View changes for a spceific file. (This command opens up a `less` editor/program. Type `h` for help and `q` to exit).
+```
+git diff [filename]
+```
+- Add modified file to "staging area" (i.e. tell git, that you intent to commit this modified file)
+```
+git add [filename]
+```
+- Add all modified files
+```
+git add *
+```
+- Commit added files
+```
+git commit -m "message"
+```
+- Push file to remote repository (**upload** changes)
+```
+git push
+```
+- Pull latest commits from remote repository (**download** latest changes)
+```
+git pull
+```
