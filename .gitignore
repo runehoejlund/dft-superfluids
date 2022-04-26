@@ -6,7 +6,6 @@ error_logs/
 
 # gpaw
 *.gpw
-*.npz
 
 # playground
 playground/
