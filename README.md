@@ -64,9 +64,9 @@ linuxsh -X
 source ~/path-to-your-venv/bin/activate
 ```
 
-- Launch interactive jupyter notebook
+- Launch interactive jupyter notebook (replace `venv` with name of your virtual environment)
 ```
-python -m ipykernel install --user --name=your-venv
+python -m ipykernel install --user --name=venv
 jupyter notebook --no-browser --port 40000 --ip=$HOSTNAME
 ```
 Open new terminal locally and run (USERNAME: your DTU username, HOSTNAME: servername you see in the other window (n-XX- YY-ZZ), PORT: 40000)
@@ -105,3 +105,16 @@ git push
 ```
 git pull
 ```
+
+### Running Jupyter Notebooks in VSCode
+This may only work on a mac (unix system) because the X11-forwarding seems to be unsupported for VSCode on Windows. On the hpc compute node, run the following command:
+- (optional) Set a password for the Jupyter Notebook Server:
+```
+jupyter notebook password
+```
+- Launch a Jupyer server with the following command:
+```
+jupyter notebook --no-browser --port 40000 --ip=$HOSTNAME
+```
+This outputs a Jupyter server address (e.g. http://n-10-10-1:40000/). Connect to the Jupyter Server as [described here](https://code.visualstudio.com/docs/datascience/jupyter-notebooks#_connect-to-a-remote-jupyter-server) (don't include a token). Type the password when prompted to do so.
+- Open up a jupyter notebook file (ipynb-file). In the top right corner, choose the remote venv kernel.

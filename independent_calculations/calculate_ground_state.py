@@ -1,7 +1,3 @@
-from ase.io import read
-from gpaw import GPAW, PW, FermiDirac
-import os
-
 def calculate_ground_state(formula):
     ''' Calculates ground state gpw file for specified material.
 
@@ -9,9 +5,16 @@ def calculate_ground_state(formula):
     formula: str
         Chemical formula corresponding to name of json-file (without json-extension) in structures directory.
     '''
-    # print('Size of structure file:')
-    # print(os.path.getsize('./structures/' + formula + '.json'))
+    from ase.io import read
+    from gpaw import GPAW, PW, FermiDirac
+    import numpy as np
+    
+    # Load in structure and set vacuum to 20 Å.
     structure = read('./structures/' + formula + '.json')
+    lengths = structure.get_cell().lengths()
+    lengths[np.argmax(lengths)] = 20
+    structure.set_cell(lengths)
+    structure.center()
     # structure.pbc = (1, 1, 1)
 
     ecut = 600
