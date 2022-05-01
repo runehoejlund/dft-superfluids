@@ -1,14 +1,9 @@
 from ase.io import read
+from ase.parallel import parprint
 from gpaw import GPAW, PW, FermiDirac
 import numpy as np
 
-def set_vacuum(structure, vac=20):
-    lengths = structure.get_cell().lengths()
-    lengths[np.argmax(lengths)] = vac
-    structure.set_cell(lengths)
-    structure.center()
-
-def calculate_ground_state(formula, ecut = 600, no_kpts=30, vac=20, xc='LDA', T_e=0.01):
+def calculate_ground_state(formula, ecut = 800, no_kpts=30, vac=20, xc='LDA', T_e=0.01, nbands = 500):
     ''' Calculates ground state gpw file for specified material.
 
     @parameters:
@@ -27,7 +22,7 @@ def calculate_ground_state(formula, ecut = 600, no_kpts=30, vac=20, xc='LDA', T_
     '''
     # Load in structure and set vacuum to 20 Å.
     structure = read('../structures/' + formula + '.json')
-    set_vacuum(structure, vac)
+    structure.center(vacuum=vac, axis=2)
     structure.pbc = (1, 1, 1)
 
     out_dir = './out/'
@@ -42,11 +37,17 @@ def calculate_ground_state(formula, ecut = 600, no_kpts=30, vac=20, xc='LDA', T_
     structure.calc = calc
     structure.get_potential_energy()
 
-    calc.diagonalize_full_hamiltonian(nbands=500, expert=True)
+    calc.diagonalize_full_hamiltonian(nbands=nbands, expert=True)
     calc.write(out_dir + 'gs_'+ formula + '_fulldiag.gpw', 'all')
 
 if __name__ == '__main__':
+    import os
+    abspath = os.path.abspath(__file__)
+    dname = os.path.dirname(abspath)
+    os.chdir(dname)
+
     materials = ['BN', 'MoS2', 'MoSe2', 'MoTe2', 'WS2', 'WSe2', 'WTe2']
     for formula in materials:
-        print('calculating ground state for ' + formula)
+        parprint('Calculating ground state for ' + formula)
         calculate_ground_state(formula)
+        # calculate_ground_state(formula, ecut = 100, no_kpts=10, vac=20, xc='LDA', T_e=0.01, nbands = 10)

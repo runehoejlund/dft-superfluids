@@ -106,6 +106,16 @@ git push
 git pull
 ```
 
+## VS Code Guides/Commands
+### Connecting to ssh in VSCode
+Add the [Remote-SSH-extension](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-ssh) to VSCode and connect to the host (`ssh -XY USERNAME@login.gbar.dtu.dk`) using their getting started guide.
+
+**Trouble shooting with Remote-SHH**
+
+If the remote ssh-connection suddenly fails (e.g. displays password prompt again and again), you can try the following:
+1. Open the command pallet (CTRL + SHIFT + P or COMMAND + SHIFT + P (mac) ).
+2. Type `Remote-SSH: Kill VS Code Server on Host`. Then try to connect again
+
 ### Running Jupyter Notebooks in VSCode
 This may only work on a mac (unix system) because the X11-forwarding seems to be unsupported for VSCode on Windows. On the hpc compute node, run the following command:
 - (optional) Set a password for the Jupyter Notebook Server:
