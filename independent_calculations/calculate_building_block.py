@@ -6,10 +6,11 @@ def calculate_building_block(formula):
     from ase.parallel import parprint
 
     out_dir = './out/'
+    file_name = out_dir + 'gs_'+ formula + '_fulldiag.gpw'
     parprint('Calculating Building block for ' + formula)
 
     # chi
-    df = DielectricFunction(calc=out_dir + 'gs_'+ formula + '_fulldiag.gpw',
+    df = DielectricFunction(calc=file_name,
                         eta=0.001,
                         domega0=0.05,
                         omega2=10.0,
@@ -21,8 +22,9 @@ def calculate_building_block(formula):
 
     buildingblock.calculate_building_block()
 
+    # # Uncomment to delete gpaw calculation when done.
     # if world.rank == 0:
-    #     Path(formula + '_gs_fulldiag.gpw').unlink()
+    #     Path(file_name).unlink()
 
 if __name__ == '__main__':
     import os
