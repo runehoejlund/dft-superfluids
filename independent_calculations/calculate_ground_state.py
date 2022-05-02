@@ -20,6 +20,9 @@ def calculate_ground_state(formula, ecut = 800, no_kpts=30, vac=20, xc='LDA', T_
     T_e: float
         Electron temperature in eV used for fermi-smearing
     '''
+    parprint('Calculating ground state for ' + formula)
+    parprint('Parameters:: ecut: ' + str(ecut) + ', no_kpts: ' + str(no_kpts) + ', vac: ' + str(vac) + ', xc: ' + xc + ', T_e: ' + str(T_e))
+
     # Load in structure and set vacuum to 20 Å.
     structure = read('../structures/' + formula + '.json')
     structure.center(vacuum=vac, axis=2)
@@ -48,6 +51,5 @@ if __name__ == '__main__':
 
     materials = ['BN', 'MoS2', 'MoSe2', 'MoTe2', 'WS2', 'WSe2', 'WTe2']
     for formula in materials:
-        parprint('Calculating ground state for ' + formula)
         calculate_ground_state(formula)
         # calculate_ground_state(formula, ecut = 100, no_kpts=10, vac=20, xc='LDA', T_e=0.01, nbands = 10)
