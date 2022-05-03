@@ -13,8 +13,8 @@ file_name = out_dir + 'gs_'+ formula + '_fulldiag.gpw'
 
 if exists(file_name):
     parprint('Found fully diagonalised solution for ' + formula)
-    calculate_building_block(formula)
+    calculate_building_block(formula, cleanup=True)
 else:
     parprint('No precalculated ground state calculation found for ' + formula)
     calculate_ground_state(formula, ecut=500)
-    calculate_building_block(formula)
+    calculate_building_block(formula, cleanup=True)
