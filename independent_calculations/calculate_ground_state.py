@@ -3,7 +3,7 @@ from ase.parallel import parprint
 from gpaw import GPAW, PW, FermiDirac
 import numpy as np
 
-def calculate_ground_state(formula, ecut = 800, no_kpts=30, vac=20, xc='LDA', T_e=0.01, nbands = 500):
+def calculate_ground_state(formula, ecut = 500, no_kpts=30, vac=20, xc='LDA', T_e=0.01, nbands = 528):
     ''' Calculates ground state gpw file for specified material.
 
     @parameters:
@@ -13,7 +13,7 @@ def calculate_ground_state(formula, ecut = 800, no_kpts=30, vac=20, xc='LDA', T_
         Plane Wave Basis Energy cutoff
     no_kpts: int
         Number of k-pts in x- and y-direction
-    vac: float
+    vac: float 
         Vacuum in Ångstrom in out of plane direction
     xc: str
         Exchange Correlation Functional
