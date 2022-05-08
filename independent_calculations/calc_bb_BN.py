@@ -1,4 +1,4 @@
-formula = 'WSe2'
+formula = 'BN'
 
 from calculate_building_block import *
 from calculate_ground_state import *

@@ -1,4 +1,4 @@
-def calculate_building_block(formula, cleanup=False, ecut = 150):
+def calculate_building_block(formula, cleanup=False, ecut = 50, nblocks=24):
     from pathlib import Path
     from gpaw.mpi import world
     from gpaw.response.df import DielectricFunction
@@ -11,14 +11,16 @@ def calculate_building_block(formula, cleanup=False, ecut = 150):
 
     # chi
     df = DielectricFunction(calc=file_name,
-                        eta=0.001,
-                        domega0=0.05,
-                        omega2=10.0,
-                        nblocks=8,
+                        frequencies={
+                            'type': 'nonlinear',
+                            'domega0': 0.05,
+                            'omega2': 10.0},
                         ecut=ecut,
-                        truncation='2D')
+                        eta=0.001,
+                        truncation='2D',
+                        nblocks=nblocks)
 
-    buildingblock = BuildingBlock(formula, df, qmax=3.0)
+    buildingblock = BuildingBlock(formula, df)
 
     buildingblock.calculate_building_block()
 
