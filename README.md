@@ -4,7 +4,7 @@ Project for calculating parameters for a more realistic modelling of exciton sup
 ## Getting Started
 
 ### Install dependencies
-Dependencies are listed in requirements.txt. Run the following command to install the python packages
+You need a virtual environment with GPAW to run calculations. If on NiflHeim, use the `install_gpaw.sh`. Other dependencies are listed in requirements.txt. Run the following command to install the python packages
 ```
 pip install -r requirements.txt
 ```
