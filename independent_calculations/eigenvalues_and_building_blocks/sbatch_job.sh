@@ -8,6 +8,7 @@
 #SBATCH --output=mpi_job_gpaw_full.log
 #SBATCH --error=mpi_job_gpaw_full_errors.log
 
-source ~/venv/bin/activate
+# source ~/venv/bin/activate
+module load GPAW
 
-mpiexec gpaw python calc_bb_WS2.py
+mpiexec gpaw python calc_gs_WS2.py

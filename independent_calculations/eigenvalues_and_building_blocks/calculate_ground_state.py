@@ -40,7 +40,6 @@ def calculate_ground_state(formula, ecut = 500, no_kpts=30, vac=20, xc='LDA', T_
 
     structure.calc = calc
     structure.get_potential_energy()
-    # calc.write(file_prefix + '.gpw', 'all')
 
     calc.diagonalize_full_hamiltonian(nbands=nbands, expert=True)
     calc.write(file_prefix + '_fulldiag.gpw', 'all')
