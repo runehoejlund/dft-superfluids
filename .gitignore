@@ -1,3 +1,8 @@
+# Temp ignore work directories
+mx2_bb_superduper
+clean_building_block
+QEH_tutorial
+
 # Plots
 plots
 
@@ -8,7 +13,7 @@ error_logs/
 **.myqueue/
 
 # gpaw
-*.gpw
+*_fulldiag.gpw
 
 # playground
 playground/

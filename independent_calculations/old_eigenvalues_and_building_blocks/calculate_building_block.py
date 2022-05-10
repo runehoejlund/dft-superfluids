@@ -20,7 +20,7 @@ def calculate_building_block(formula, cleanup=False, ecut = 50, nblocks=24):
                         truncation='2D',
                         nblocks=nblocks)
 
-    buildingblock = BuildingBlock(formula, df)
+    buildingblock = BuildingBlock(formula, df, qmax=3.0)
 
     buildingblock.calculate_building_block()
 
