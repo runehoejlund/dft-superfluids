@@ -124,5 +124,9 @@ def get_thickness(formula):
     '''
     @Returns: Default thickness for material with the given chemical formula (e.g. for 'H-MoS2').
     '''
-    key = [k for k in _default_thicknesses.keys() if k.startswith(formula)][0]
+    keys = [k for k in _default_thicknesses.keys() if k.startswith(formula)]
+    if len(keys) == 1:
+        key = keys[0]
+    else:
+        key = [k for k in _default_thicknesses.keys() if k.startswith('H-' + formula)][0]
     return _default_thicknesses[key]
