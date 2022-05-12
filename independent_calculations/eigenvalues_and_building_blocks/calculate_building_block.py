@@ -18,7 +18,7 @@ def calculate_building_block(formula, cleanup=False, ecut = 100, nblocks=24, eig
                             'omega2': 35.0},
                         ecut=ecut,
                         eta=0.001,
-                        nbands=504,
+                        nbands=400,
                         truncation='2D',
                         nblocks=nblocks)
 
