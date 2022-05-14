@@ -51,14 +51,6 @@ def calculate_and_save_hs_results(materials, nPadding, nFilling):
             bilayer[count] = 'n-' + e_layer + ', ' + 'p-' + h_layer
             print(bilayer[count])
 
-            # d_BN = get_thickness('BN')  # hBN-hBN distance#3.22 før
-            # d_e_layer = get_thickness(e_layer)
-            # d_e_BN = (d_BN+d_e_layer)/2  # MoS2-hBN distance
-            # d_h_layer = get_thickness(h_layer)
-            # d_h_BN = (d_BN+d_h_layer)/2  # WSe2-hBN distance
-            # layers = ['{}BN'.format(nPadding), e_layer, '3BN', h_layer, '{}BN'.format(nPadding)]
-            # d= [d_BN]*(nPadding-1) + [d_e_BN]*2 + [d_BN]*(nFilling-1) + [d_h_BN]*2 + [d_BN]*(nPadding-1)
-
             layers = ['BN'] * nPadding + [e_layer] + ['BN'] * nFilling + [h_layer] + ['BN'] * nPadding
             d = [(get_thickness(l) + get_thickness(layers[i+1]))/2 for (i,l) in enumerate(layers[:-1])]
 
@@ -69,8 +61,8 @@ def calculate_and_save_hs_results(materials, nPadding, nFilling):
 
             count += 1
     
-    np.savez('vdWHs_nFilling=' + str(nFilling) + '_nPadding=' + str(nPadding) + '.npz',
-        bilayer=bilayer, E_b=E_b, E_b_heat_mat=E_b_heat_mat,
+    np.savez('independent_vdWHs_nFilling=' + str(nFilling) + '_nPadding=' + str(nPadding) + '.npz',
+        materials=materials, bilayer=bilayer, E_b=E_b, E_b_heat_mat=E_b_heat_mat,
         E_b_heat_xlabels=E_b_heat_xlabels, E_b_heat_ylabels=E_b_heat_ylabels,
         q=q, r=r, omega=omega, U_ee=U_ee, U_eh=U_eh, U_eh_r=U_eh_r, epsM=epsM)
 
@@ -89,4 +81,4 @@ if __name__ == '__main__':
     dname = os.path.dirname(abspath)
     os.chdir(dname)
 
-    calculate_hetereostructures(materials=['WS2','MoS2','WSe2','MoSe2'])
+    calculate_hetereostructures(materials=['WS2', 'WSe2','MoTe2'])
