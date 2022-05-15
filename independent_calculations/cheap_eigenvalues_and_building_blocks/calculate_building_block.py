@@ -42,7 +42,7 @@ if __name__ == '__main__':
     
     ecut = 100
     if len(sys.argv) > 2:
-        ecut = sys.argv[2]
+        ecut = float(sys.argv[2])
     
     eig_xc = 'PBE'
     if len(sys.argv) > 3:
@@ -50,6 +50,6 @@ if __name__ == '__main__':
     
     eig_no_kpts = 30
     if len(sys.argv) > 4:
-        eig_no_kpts = sys.argv[4]
+        eig_no_kpts = int(sys.argv[4])
 
     calculate_building_block(formula, ecut=ecut, nblocks=40, nbands=120, eig_xc=eig_xc, eig_no_kpts=eig_no_kpts)
