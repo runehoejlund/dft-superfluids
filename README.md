@@ -3,6 +3,24 @@ Project for calculating parameters for a more realistic modelling of exciton sup
 
 ## Getting Started
 
+### Overview of Important Directories/Files:
+`hetereostructure_results`: In this directory is the
+- precalculated building-blocks (e.g. `MoS2-chi.npz`, etc.)
+- `hetereostructure_analysis.ipynb`: Notebook for plotting heterostructure results (including in final report)
+- `calculate_hetereostructures.py`: Python file for using qeh for calculating effective potentials, dielectric function etc. for diffferent bilayer combinations of heterostructures. Results are exported as `.npz`-files in the same directory.
+- Precalculated building blocks are obtained from the [Van der Waals heterostructures Database](https://cmr.fysik.dtu.dk/vdwh/vdwh.html#dielectric-building-blocks). Go to the `building_blocks` directory and download the building blocks as described there.
+
+`wannier_model`: This directory is similar to `./hetereostructure_results`, but it focuses on applying the analytical potential in the Wannier model and compare this with the qeh-model.
+- `hs_wannier_analysis.ipynb`: Notebook for comparing Wannier model with Conti et al. and analytic vs. qeh-/ab initio potential.
+- `hs_wannier_model_analytic.py`: Python file for using analytic exression and qeh for calculating effective potentials, dielectric function etc. for diffferent heterostructure. This file is **very** similar to `calculate_hetereostructures.py`, and the two should probably be combined, such that the `wannier_model` directory is merged with the `./hetereostructure_results` directory. The crucial difference is that `hs_wannier_model_analytic.py` can use the analytic potential in the Wannier-model instead of the qeh-potential. As above, results are exported as `.npz`-files in the same directory. 
+- `hs_wannier_model_analytic_article_masses.py`: Same as above but with article masses instead of qeh masses. Should maybe also be combined with the above.
+- `hs_wannier_model_qeh_article_masses.py`: Same as above but with qeh instead of analytical poential and article masses instead of qeh masses.
+
+`deprecated/structures`: Deprecated for now. Contains structure files for making atoms object to be used in DFT-calculations, if we wish to build our own building blocks.
+
+`independent_calulations`: In this directory are all files for making our own independent building blocks and obtaining results with these.
+
+
 ### Install dependencies
 You need a virtual environment with GPAW to run calculations. If on NiflHeim, use the `install_gpaw.sh`. Other dependencies are listed in requirements.txt. Run the following command to install the python packages
 ```

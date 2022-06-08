@@ -1,7 +1,7 @@
 # Temp ignore work directories
-mx2_bb_superduper
-clean_building_block
-QEH_tutorial
+deprecated/mx2_bb_superduper
+deprecated/clean_building_block
+deprecated/QEH_tutorial
 
 # Plots
 plots
