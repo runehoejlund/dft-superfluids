@@ -4,9 +4,9 @@ from gpaw.response.df import DielectricFunction
 from gpaw.response.qeh import BuildingBlock
 from ase.parallel import parprint
     
-def calculate_building_block(formula, cleanup=False, ecut = 100, nblocks=24, omega2=35.0, nbands=400, eig_xc='PBE', eig_no_kpts=30):
+def calculate_building_block(formula, cleanup=False, ecut = 100, nblocks=24, eig_xc='PBE'):
     out_dir = './out/'
-    file_prefix = out_dir + formula + '_xc=' + eig_xc + '_no_kpts=' + str(eig_no_kpts)
+    file_prefix = out_dir + formula + '_xc=' + eig_xc
     file_name = file_prefix + '_fulldiag.gpw'
     parprint('Calculating Building block for ' + formula)
 
@@ -15,14 +15,14 @@ def calculate_building_block(formula, cleanup=False, ecut = 100, nblocks=24, ome
                         frequencies={
                             'type': 'nonlinear',
                             'domega0': 0.01,
-                            'omega2': omega2},
+                            'omega2': 35.0},
                         ecut=ecut,
                         eta=0.001,
-                        nbands=nbands,
+                        nbands=400,
                         truncation='2D',
                         nblocks=nblocks)
-    output_file = formula + '_ecut=' + str(ecut) + '_omega2=' + str(omega2) + '_nbands=' + str(nbands) + '_eig_xc=' + eig_xc + '_eig_no_kpts=' + str(eig_no_kpts)
-    buildingblock = BuildingBlock(output_file, df, qmax=3.0)
+
+    buildingblock = BuildingBlock(formula, df, qmax=3.0)
 
     buildingblock.calculate_building_block()
 
@@ -39,17 +39,7 @@ if __name__ == '__main__':
     os.chdir(dname)
 
     formula = sys.argv[1]
-    
     ecut = 100
-    if len(sys.argv) > 2:
-        ecut = float(sys.argv[2])
-    
-    eig_xc = 'PBE'
-    if len(sys.argv) > 3:
-        eig_xc = sys.argv[3]
-    
-    eig_no_kpts = 30
-    if len(sys.argv) > 4:
-        eig_no_kpts = int(sys.argv[4])
-
-    calculate_building_block(formula, ecut=ecut, nblocks=40, nbands=240, eig_xc=eig_xc, eig_no_kpts=eig_no_kpts)
+    if formula == 'BN':
+        ecut = 150
+    calculate_building_block(formula, ecut=ecut)

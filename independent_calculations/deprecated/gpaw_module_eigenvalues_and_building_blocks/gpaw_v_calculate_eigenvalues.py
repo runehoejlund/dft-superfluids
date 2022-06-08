@@ -3,7 +3,7 @@ from ase.parallel import parprint
 from gpaw import GPAW, PW, FermiDirac
 import numpy as np
 
-def calculate_eigenvalues(formula, ecut = 500, no_kpts=30, vac=10, xc='PBE', T_e=0.01, nbands = 520):
+def calculate_eigenvalues(formula, ecut = 500, no_kpts=30, vac=20, xc='PBE', T_e=0.01, nbands = 504):
     parprint('Calculating ground state for ' + formula)
     parprint('Parameters: ecut: ' + str(ecut) + ', no_kpts: ' + str(no_kpts) + ', vac: ' + str(vac) + ', xc: ' + xc + ', T_e: ' + str(T_e))
 
@@ -13,7 +13,7 @@ def calculate_eigenvalues(formula, ecut = 500, no_kpts=30, vac=10, xc='PBE', T_e
     structure.pbc = (1, 1, 1)
 
     out_dir = './out/'
-    file_prefix = out_dir + formula + '_xc=' + xc + '_no_kpts=' + str(no_kpts)
+    file_prefix = out_dir + formula + '_xc=' + xc
 
     calc = GPAW(mode=PW(ecut),
                 xc=xc,
@@ -37,16 +37,7 @@ if __name__ == '__main__':
     os.chdir(dname)
 
     formula = sys.argv[1]
-    
     ecut = 500
-    if len(sys.argv) > 2:
-        ecut = float(sys.argv[2])
-    
-    xc = 'PBE'
-    if len(sys.argv) > 3:
-        xc = sys.argv[3]
-    
-    no_kpts = 30
-    if len(sys.argv) > 4:
-        no_kpts = int(sys.argv[4])
-    calculate_eigenvalues(formula, ecut=ecut, xc=xc, no_kpts=no_kpts)
+    if formula == 'BN':
+        ecut = 800
+    calculate_eigenvalues(formula, ecut=ecut)
