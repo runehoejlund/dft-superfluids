@@ -52,4 +52,4 @@ if __name__ == '__main__':
     if len(sys.argv) > 4:
         eig_no_kpts = int(sys.argv[4])
 
-    calculate_building_block(formula, ecut=ecut, nblocks=40, nbands=120, eig_xc=eig_xc, eig_no_kpts=eig_no_kpts)
+    calculate_building_block(formula, ecut=ecut, nblocks=40, nbands=240, eig_xc=eig_xc, eig_no_kpts=eig_no_kpts)
