@@ -99,4 +99,4 @@ if __name__ == '__main__':
     dname = os.path.dirname(abspath)
     os.chdir(dname)
 
-    calculate_and_save_binding_energies(materials=['WS2','MoS2','WSe2','MoSe2'], nPadding=0, nFilling=3)
+    calculate_and_save_binding_energies(materials=['WS2','MoS2','WSe2','MoSe2','CrS2','CrSe2'], nPadding=0, nFilling=3)

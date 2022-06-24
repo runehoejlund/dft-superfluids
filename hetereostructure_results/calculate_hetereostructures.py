@@ -89,4 +89,4 @@ if __name__ == '__main__':
     dname = os.path.dirname(abspath)
     os.chdir(dname)
 
-    calculate_hetereostructures(materials=['WS2','MoS2','WSe2','MoSe2'])
+    calculate_hetereostructures(materials=['WS2','MoS2','WSe2','MoSe2','CrS2','CrSe2'])
