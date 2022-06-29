@@ -1,0 +1,43 @@
+#BiEx INPUT FILE
+#ALL UNITS IN eV and ANGSTROM
+
+*** JOB ***
+%(filename)s MF #Simulation name and job name. Abailable job names are MF and FULL
+
+*** SETUP ***
+1 200 0.003  0.00001 #nthread, num_iter, conv criteria,deltacut
+0.02 -1.0 T 3HVAD SKAL DER STÅ HER? #Delta_guess, FWHM of Deltaguess (negative=constant) ,calc_P, Wtype (1 or 2 or 3)
+%(filename)s.dat #if Wtype=3 bare interaction is read from this file
+
+*** SETUP-FULL ***
+F 50 3 700                           #restart_full, numiter_full, Piter, T_eff_pade
+1 10 15 15 35 35 99 100 5 10 10.0    #index4pade(1:8),lspp,numpoles,factorW
+
+*** DENSITY ***
+0.00001 0.00001 6.0 2.0  #ne nh Deh kappa
+40 %(dstep)s  #number of density sweeps, density step
+
+*** TEMPERATURE ***
+0.1 150.1 1 # T1 T2 nT
+
+*** K-MESH ***
+1.5 200 100 0 #kcut, nk, ntheta, nksmall (if dens k-mesh at 0 and kF)
+F 4.0 0.0 0.0  #linear alpha, alphalow(if nksmall),k_alpha (if value of alpha depends on density)
+
+*** PLOT ***
+F 10 200 0.1 #PW_plot T_eff nw kplot
+
+*** DISPERSION ***
+PARABOLIC #Available options PARABOLIC,BILAYER (See Nilsson et al PRM 5 2021),TMD (See Conti et al CondensedMatter 5 2020)
+2 0.0 2.00 1.00  #numorbs,Eg,gvalley,gspin
+
+*** BILAYER ***
+0.0 0.0 0.0 #th0,th1,a
+
+*** PARABOLIC ***
+%(me)s %(mh)s %(soc_split_e) %(soc_split_e) 0 0  me, mh, ESOCe, ESOCh
+
+*** TMD ***
+0.038 0.46 -0.021 0.18 #lce,lve,lch,lvh SOCSPLITTINGS FOR VALENCE AND COND BAND FOR TWO LAYERS. NOTE ERROR IN CONTI, THESE ARE DOUBLE THE VALUES THAT ACTUALLY ENTER THE EQ.
+0.3 0.5 1.47 1.6 #me,mh,Ege, Egh #DISPERSION PARAMETERS, SEE https://arxiv.org/pdf/1809.01065.pdf
+

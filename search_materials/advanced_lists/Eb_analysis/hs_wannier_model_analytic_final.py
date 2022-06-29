@@ -5,23 +5,25 @@ import ase.units
 Hartree = ase.units.Hartree
 Bohr = ase.units.Bohr
 
-def get_exciton_screened_potential_r_analytic(r_array):
-    d=10/Bohr
+def get_exciton_screened_potential_r_analytic(r_array,d):
+    #d0=10/Bohr #use this for the same thickness. Remember then to change the name of the output file
+    d0=sum(d)/Bohr #use this for the varying thickness
+    print(d0*Bohr)
     eps2=2
-    W_r=-(1/eps2)*1/np.sqrt(r_array**2+d**2)
+    W_r=-(1/eps2)*1/np.sqrt(r_array**2+d0**2)
     
     return r_array, W_r
 
 def get_exciton_binding_energies_coulomb(eff_mass, L_min=-50, L_max=10,
                                      Delta=0.1, e_distr=None, h_distr=None,
-                                     Wq_name=None, tweak=None):
+                                     Wq_name=None, tweak=None,d=10):
                                      
         from scipy.linalg import eig
         r_space = np.arange(L_min, L_max, Delta)
         Nint = len(r_space)
         
         # EDIT THIS
-        r, W_r = get_exciton_screened_potential_r_analytic(r_array=np.exp(r_space))
+        r, W_r = get_exciton_screened_potential_r_analytic(r_array=np.exp(r_space),d=d)
 
         H = np.zeros((Nint, Nint), dtype=complex)
         for i in range(0, Nint):
@@ -42,7 +44,7 @@ def get_exciton_binding_energies_coulomb(eff_mass, L_min=-50, L_max=10,
         return ee * Hartree, ev
 
 # %% OUR OWN FUNCTIONS
-def get_E_b_for_hs(eff_mass, nFilling, nPadding):
+def get_E_b_for_hs(eff_mass, nFilling, nPadding,d):
     '''
     @returns: E_b
     '''
@@ -56,7 +58,7 @@ def get_E_b_for_hs(eff_mass, nFilling, nPadding):
     # Exciton Binding Energies
     ee, ev = get_exciton_binding_energies_coulomb(eff_mass=eff_mass,
                                             e_distr=e_distr,
-                                            h_distr=h_distr)
+                                            h_distr=h_distr,d=d)
     
     # TODO: This is where we sohuld use our own function also
     # ee_2d_coulomb, ev_2d_coullomb = get_exciton_binding_energies_coulomb(...)
@@ -66,7 +68,7 @@ def get_E_b_for_hs(eff_mass, nFilling, nPadding):
     # Note: The units of V_ee and V_eh (in q-space) are unknown (we don't know the FT)
     return E_b
 
-def calculate_and_save_binding_energies(materials_e,materials_h,e_avg_vec_iso,h_avg_vec_iso,Mat_plot_iso,d_List,nPadding, nFilling):
+def calculate_and_save_binding_energies(materials_e,materials_h,e_avg_vec_iso,h_avg_vec_iso,Mat_plot_iso,d_List,bandgap_vec,nPadding, nFilling):
     N_e = len(materials_e)
     N_h = len(materials_h)
     E_b_heat_mat = np.zeros((N_e,N_h))
@@ -74,6 +76,8 @@ def calculate_and_save_binding_energies(materials_e,materials_h,e_avg_vec_iso,h_
     E_b_heat_xlabels = ['p-' + m for m in materials_h]
     E_b = [[]]*N_e*N_h
     effmass_Matrix=np.zeros((N_e,N_h))
+    d0_Matrix=np.zeros((N_e,N_h))
+    avgBandgap_Matrix=np.zeros((N_e,N_h))
     bilayer = [[]]*N_e*N_h
 
     count = 0
@@ -87,6 +91,8 @@ def calculate_and_save_binding_energies(materials_e,materials_h,e_avg_vec_iso,h_
             eff_mass=1/(1/e_avg_vec_iso[i_e]+1/h_avg_vec_iso[i_h])
             effmass_Matrix[i_e,i_h]=eff_mass
 
+            avgBandgap_Matrix[i_e, i_h] = (bandgap_vec[e_layer==Mat_plot_iso]+bandgap_vec[h_layer==Mat_plot_iso])/2
+            print(avgBandgap_Matrix[i_e, i_h])
             layers = ['BN'] * nPadding + [e_layer] + ['BN'] * nFilling + [h_layer] + ['BN'] * nPadding
             print(layers)
             d=[]
@@ -104,15 +110,16 @@ def calculate_and_save_binding_energies(materials_e,materials_h,e_avg_vec_iso,h_
 
             hs = Heterostructure(structure=layers, d=d, include_dipole=True, wmax=0, qmax=1, d0=0)              
 
-            E_b[count] = get_E_b_for_hs(eff_mass, nFilling, nPadding)
+            E_b[count] = get_E_b_for_hs(eff_mass, nFilling, nPadding,d)
 
             E_b_heat_mat[i_e, i_h] = E_b[count]
+            d0_Matrix[i_e, i_h] =sum(d)
             count += 1
             
     
-    np.savez('wannier_analytic_nFilling=' + str(nFilling) + '_nPadding=' + str(nPadding)+'.npz',
+    np.savez('wannier_analytic_varying_thickness_nFilling=' + str(nFilling) + '_nPadding=' + str(nPadding)+'.npz',
         bilayer=bilayer, E_b=E_b, E_b_heat_mat=E_b_heat_mat,
-        E_b_heat_xlabels=E_b_heat_xlabels, E_b_heat_ylabels=E_b_heat_ylabels,effmass_Matrix=effmass_Matrix)
+        E_b_heat_xlabels=E_b_heat_xlabels, E_b_heat_ylabels=E_b_heat_ylabels,effmass_Matrix=effmass_Matrix,d0_Matrix=d0_Matrix,avgBandgap_Matrix=avgBandgap_Matrix)
 
 if __name__ == '__main__':
     import os
@@ -136,7 +143,8 @@ if __name__ == '__main__':
     h_avg_vec_iso=e_avg_vec[h_iso]
     Mat_plot_iso=out['Mat_plot_iso']
     d_List=out['d_List']
+    bandgap_vec=out['bandgap_iso']
     iNDEX1=0
     iNDEX2e=len(e_avg_vec_iso)
     iNDEX2h=len(h_avg_vec_iso)
-    calculate_and_save_binding_energies(materials_e=materials_e[iNDEX1:iNDEX2e],materials_h=materials_h[iNDEX1:iNDEX2h],e_avg_vec_iso=e_avg_vec_iso[iNDEX1:iNDEX2e],h_avg_vec_iso=h_avg_vec_iso[iNDEX1:iNDEX2h], Mat_plot_iso=Mat_plot_iso,d_List=d_List,nPadding=0, nFilling=1)
+    calculate_and_save_binding_energies(materials_e=materials_e[iNDEX1:iNDEX2e],materials_h=materials_h[iNDEX1:iNDEX2h],e_avg_vec_iso=e_avg_vec_iso[iNDEX1:iNDEX2e],h_avg_vec_iso=h_avg_vec_iso[iNDEX1:iNDEX2h], Mat_plot_iso=Mat_plot_iso,d_List=d_List,bandgap_vec=bandgap_vec,nPadding=0, nFilling=1)

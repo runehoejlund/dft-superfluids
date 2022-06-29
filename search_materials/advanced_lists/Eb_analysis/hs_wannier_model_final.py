@@ -14,7 +14,6 @@ def get_exciton_binding_energies_coulomb(hs, eff_mass, L_min=-50, L_max=10,
         r_space = np.arange(L_min, L_max, Delta)
         Nint = len(r_space)
         
-        # EDIT THIS
         r, W_r = hs.get_exciton_screened_potential_r(r_array=np.exp(r_space),
                                                        e_distr=e_distr,
                                                        h_distr=h_distr,
@@ -72,7 +71,10 @@ def calculate_and_save_binding_energies(materials_e,materials_h,e_avg_vec_iso,h_
     E_b_heat_xlabels = ['p-' + m for m in materials_h]
     E_b = [[]]*N_e*N_h
     bilayer = [[]]*N_e*N_h
-
+    #interactions
+    weel_depth=np.zeros((N_e,N_h))
+    int_strength_q=np.zeros((N_e,N_h))
+    #
     count = 0
     for (i_e, e_layer) in enumerate(materials_e):
         for (i_h, h_layer) in enumerate(materials_h):
@@ -103,10 +105,23 @@ def calculate_and_save_binding_energies(materials_e,materials_h,e_avg_vec_iso,h_
 
             E_b_heat_mat[i_e, i_h] = E_b[count]
             count += 1
+            #Other stuff, taken from heterostructureresults/calculate_heterostructure
+            e_distr = np.array([0, 0]*nPadding + [0, 0] + [0, 0]*nFilling + [1, 0] + [0,0]*nPadding)
+            h_distr = np.array([0, 0]*nPadding + [1, 0] + [0, 0]*nFilling + [0, 0] + [0,0]*nPadding)
+            # Dielectric Function
+            q, omega, epsM = hs.get_macroscopic_dielectric_function()
+            # Screened potential
+            _, U_eh, _ = hs.get_exciton_screened_potential(e_distr=e_distr, h_distr=h_distr)
+            #
+            r = np.exp(np.arange(-50, 10, 0.1))
+            _, U_eh_r = hs.get_exciton_screened_potential_r(r, e_distr=e_distr, h_distr=h_distr)
+            #save
+            weel_depth[i_e, i_h]=U_eh_r[0] * Hartree
+            int_strength_q[i_e, i_h]=U_eh[0]      
     
     np.savez('wannier_nFilling=' + str(nFilling) + '_nPadding=' + str(nPadding) + '.npz',
         bilayer=bilayer, E_b=E_b, E_b_heat_mat=E_b_heat_mat,
-        E_b_heat_xlabels=E_b_heat_xlabels, E_b_heat_ylabels=E_b_heat_ylabels)
+        E_b_heat_xlabels=E_b_heat_xlabels, E_b_heat_ylabels=E_b_heat_ylabels,weel_depth=weel_depth,int_strength_q=int_strength_q)
 
 if __name__ == '__main__':
     import os
