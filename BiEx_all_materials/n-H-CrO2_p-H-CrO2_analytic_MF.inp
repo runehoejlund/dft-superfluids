@@ -1,0 +1,35 @@
+#BiEx INPUT FILE
+#ALL UNITS IN eV and ANGSTROM
+
+*** JOB ***
+n-H-CrO2_p-H-CrO2_analytic_MF MF #Simulation name and job name. Abailable job names are MF and FULL
+
+*** SETUP ***
+40 200 0.003  0.00001 #nthread, num_iter, conv criteria,deltacut
+0.02 -1.0 T 3 #Delta_guess, FWHM of Deltaguess (negative=constant) ,calc_P, Wtype (1 or 2 or 3)
+F n-H-CrO2_p-H-CrO2.dat #if Wtype=3 bare interaction is read from this file
+
+*** SETUP-FULL ***
+F 50 3 700                           #restart_full, numiter_full, Piter, T_eff_pade
+1 10 15 15 35 35 99 100 5 10 10.0    #index4pade(1:8),lspp,numpoles,factorW
+
+*** DENSITY ***
+0.00001 0.00001 8.03209986809715 2.0  #ne nh Deh (distance used in analytic potential) kappa (kappa is our epsilon)
+40 2.5e-05  #number of density sweeps, density step (this is for plotting only)
+
+*** TEMPERATURE ***
+0.1 150.1 1 # T1 T2 nT
+
+*** K-MESH ***
+1.5 200 100 0 #kcut, nk, ntheta, nksmall (if dens k-mesh at 0 and kF)
+F 4.0 0.0 0.0  #linear alpha, alphalow(if nksmall),k_alpha (if value of alpha depends on density)
+
+*** PLOT ***
+F 10 200 0.1 #PW_plot T_eff nw kplot
+
+*** DISPERSION ***
+PARABOLIC #Available (Emil: I have deleted all options but the one we use) options PARABOLIC,BILAYER (See Nilsson et al PRM 5 2021),TMD (See Conti et al CondensedMatter 5 2020)
+2 0.0 2 1  #numorbs,Eg,gvalley,gspin
+
+*** PARABOLIC ***
+0.873201931754076 0.873201931754076 0.00241851806640625 0.0 #me, mh, ESOCe, ESOCh
