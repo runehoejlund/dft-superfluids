@@ -1,6 +1,7 @@
 import numpy as np
 #define function that writes values imp and sh files
 def printBiExinp(filename,material,me,mh,so_split_e,so_split_h,loc_e,loc_h,d,QEH,hours=24,cores='40'):
+    
     #file name to write
     #QEH
     if QEH==True:
@@ -9,7 +10,7 @@ def printBiExinp(filename,material,me,mh,so_split_e,so_split_h,loc_e,loc_h,d,QEH
     if QEH==False:
         logic='F'
         description='_analytic'
-    fullname=material+description+'_MF.inp'
+    fullname='./out/' + material+description+'_MF.inp'
     #write
     fileout=open(fullname, 'w')
     filein=open('inptemplate.inp','r')
@@ -62,15 +63,13 @@ def printBiExinp(filename,material,me,mh,so_split_e,so_split_h,loc_e,loc_h,d,QEH
     #writing sh-file
     #partion is determined number of cores
     partition = 'xeon'+cores
-    if cores == '40':
-        partition = partition + '_768'
 
-    
-    fileout=open(material+description+'_MF.sh','w')
+    fileout=open('./out/' + material+description+'_MF.sh','w')
     filein=open('shtemplate.sh','r')
     string=filein.read()
-    shParams={'out': material + description+'_MF/out.txt',
-            'err': material + description+'_MF/err.txt',
+    shParams={'out': './slurm_out/' + material + description+'_MF_%j_out.txt',
+            'err': './slurm_out/' + material + description+'_MF_%jerr.txt',
+            'setup': '',
             'inp': material+description+'_MF.inp',
             'hours': hours,
             'cores': cores,
@@ -86,6 +85,9 @@ def run_through_materials(loc_cond_vec,loc_val_vec,split_cond,split_val,material
     count=0
     for (i_e, e_layer) in enumerate(materials_e):
         for (i_h, h_layer) in enumerate(materials_h):
+            if loc_cond_vec[i_e] != loc_val_vec[i_h]:
+                print(loc_cond_vec[i_e] + ' != ' + loc_val_vec[i_h] + ' is an indirect bandgap. Skipping.')
+                continue
             material = 'n-' + e_layer + '_' + 'p-' + h_layer
             filename=material
             print('{} out of {}'.format(count+1,N_e*N_h))
@@ -105,7 +107,6 @@ def run_through_materials(loc_cond_vec,loc_val_vec,split_cond,split_val,material
             printBiExinp(filename,material,me,mh,so_split_e,so_split_h,loc_e,loc_h,d,QEH=True,hours=24,cores='40')
             #using analytical-potential
             printBiExinp(filename,material,me,mh,so_split_e,so_split_h,loc_e,loc_h,d,QEH=False,hours=24,cores='40')
-            
 
 if __name__ == '__main__':
     import os
@@ -137,8 +138,8 @@ if __name__ == '__main__':
 
     #choose materials
     iNDEX1=0
-    iNDEX2e=3
-    iNDEX2h=3
+    iNDEX2e=-1
+    iNDEX2h=-1
     #iNDEX2e=len(e_avg_vec_iso)
     #iNDEX2h=len(h_avg_vec_iso)
     run_through_materials(loc_cond_vec=loc_cond_vec[iNDEX1:iNDEX2e],loc_val_vec=loc_val_vec[iNDEX1:iNDEX2h],split_cond=split_cond[iNDEX1:iNDEX2e],split_val=split_val[iNDEX1:iNDEX2h],materials_e=materials_e[iNDEX1:iNDEX2e],materials_h=materials_h[iNDEX1:iNDEX2h],e_avg_vec_iso=e_avg_vec_iso[iNDEX1:iNDEX2e],h_avg_vec_iso=h_avg_vec_iso[iNDEX1:iNDEX2h], Mat_plot_iso=Mat_plot_iso,d_List=d_List,nPadding=0, nFilling=1)
