@@ -72,7 +72,7 @@ def calculate_and_save_binding_energies(materials_e,materials_h,e_avg_vec_iso,h_
     E_b = [[]]*N_e*N_h
     bilayer = [[]]*N_e*N_h
     #interactions
-    weel_depth=np.zeros((N_e,N_h))
+    well_depth=np.zeros((N_e,N_h))
     int_strength_q=np.zeros((N_e,N_h))
     #
     count = 0
@@ -99,7 +99,7 @@ def calculate_and_save_binding_energies(materials_e,materials_h,e_avg_vec_iso,h_
                 d.append((d1+d2)/2)
             print(d)
 
-            hs = Heterostructure(structure=layers, d=d, include_dipole=True, wmax=0, qmax=1, d0=0)              
+            hs = Heterostructure(structure=layers, d=d, include_dipole=True, wmax=0, qmax=1, d0=0)
 
             E_b[count] = get_E_b_for_hs(hs, eff_mass, nFilling, nPadding)
 
@@ -116,12 +116,12 @@ def calculate_and_save_binding_energies(materials_e,materials_h,e_avg_vec_iso,h_
             r = np.exp(np.arange(-50, 10, 0.1))
             _, U_eh_r = hs.get_exciton_screened_potential_r(r, e_distr=e_distr, h_distr=h_distr)
             #save
-            weel_depth[i_e, i_h]=U_eh_r[0] * Hartree
+            well_depth[i_e, i_h]=U_eh_r[0] * Hartree
             int_strength_q[i_e, i_h]=U_eh[0]      
     
     np.savez('wannier_nFilling=' + str(nFilling) + '_nPadding=' + str(nPadding) + '.npz',
         bilayer=bilayer, E_b=E_b, E_b_heat_mat=E_b_heat_mat,
-        E_b_heat_xlabels=E_b_heat_xlabels, E_b_heat_ylabels=E_b_heat_ylabels,weel_depth=weel_depth,int_strength_q=int_strength_q)
+        E_b_heat_xlabels=E_b_heat_xlabels, E_b_heat_ylabels=E_b_heat_ylabels,well_depth=well_depth,int_strength_q=int_strength_q)
 
 if __name__ == '__main__':
     import os
