@@ -33,8 +33,9 @@ def get_exciton_screened_potential_q_analytic(q_au, d_au):
     '''
     eps2 = 2
     U_ee = (2*np.pi/eps2) * 1/np.abs(q_au)
+    U_hh = U_ee
     U_eh =  - U_ee * np.exp(-d_au*(q_au))
-    return U_ee, U_eh
+    return U_ee, U_hh, U_eh
 
 # %%
 def get_E_b_analytic(eff_mass, r_au, d_au, L_min=-50, L_max=10, Delta=0.1):
@@ -86,6 +87,7 @@ def get_ab_initio_results(layers, thicknesses, eff_mass, r_au, nFilling, nPaddin
 
     # Screened potential
     U_ee = hs.get_screened_potential(layer=nPadding)
+    U_hh = hs.get_screened_potential(layer=nPadding + 1 + nFilling)
 
     # Exciton Screened Potential
     _, U_eh, _ = hs.get_exciton_screened_potential(e_distr=e_distr, h_distr=h_distr)
@@ -98,7 +100,7 @@ def get_ab_initio_results(layers, thicknesses, eff_mass, r_au, nFilling, nPaddin
     # Note: The units of U_ee and U_eh (in q-space) are unknown (we don't know the FT)
     U_eh_r = U_eh_r_au * Hartree
 
-    return E_b, q, omega, U_ee, U_eh, U_eh_r, epsM
+    return E_b, q, omega, U_ee, U_hh, U_eh, U_eh_r, epsM
 
 def calculate_heterostructure_results(materials_e,materials_h,e_avg_vec_iso,h_avg_vec_iso, materials, material_thicknesses,nPadding, nFilling, use_cache = False):
     N_e = len(materials_e)
@@ -134,6 +136,7 @@ def calculate_heterostructure_results(materials_e,materials_h,e_avg_vec_iso,h_av
         E_b = vdWH_cached['E_b']
         epsM=vdWH_cached['epsM']
         U_ee = vdWH_cached['U_ee']
+        U_hh = vdWH_cached['U_hh']
         U_eh = vdWH_cached['U_eh']
         U_eh_r = vdWH_cached['U_eh_r']
         q_au = q * Bohr
@@ -142,6 +145,7 @@ def calculate_heterostructure_results(materials_e,materials_h,e_avg_vec_iso,h_av
         E_b = [[]]*N
         epsM = [[]]*N
         U_ee = [[]]*N
+        U_hh = [[]]*N
         U_eh = [[]]*N
         U_eh_r = [[]]*N
     
@@ -153,10 +157,12 @@ def calculate_heterostructure_results(materials_e,materials_h,e_avg_vec_iso,h_av
     E_b_analytic = [[]]*N
     epsM_analytic = [[]]*N
     U_ee_analytic = [[]]*N
+    U_hh_analytic = [[]]*N
     U_eh_analytic = [[]]*N
     U_eh_r_analytic = [[]]*N
     E_b_analytic_const_d = [[]]*N
     U_ee_analytic_const_d = [[]]*N
+    U_hh_analytic_const_d = [[]]*N
     U_eh_analytic_const_d = [[]]*N
     U_eh_r_analytic_const_d = [[]]*N
 
@@ -187,7 +193,7 @@ def calculate_heterostructure_results(materials_e,materials_h,e_avg_vec_iso,h_av
 
             # Calculate and save ab initio results
             if not use_cache:
-                E_b[count], q, omega, U_ee[count], U_eh[count], U_eh_r[count], epsM[count] = get_ab_initio_results(layers=layers,
+                E_b[count], q, omega, U_ee[count], U_hh[count], U_eh[count], U_eh_r[count], epsM[count] = get_ab_initio_results(layers=layers,
                     thicknesses=thicknesses[count], eff_mass=eff_mass, r_au=r_au, nFilling=nFilling, nPadding=nPadding)
                 q_au = q * Bohr
                 E_b_heat_mat[i_e, i_h] = E_b[count]
@@ -204,8 +210,8 @@ def calculate_heterostructure_results(materials_e,materials_h,e_avg_vec_iso,h_av
             E_b_analytic_const_d_heat_mat[i_e, i_h] = E_b_analytic_const_d[count]
             
             # Screened potential
-            U_ee_analytic[count], U_eh_analytic[count] = get_exciton_screened_potential_q_analytic(q_au=q_au, d_au=d_au)
-            U_ee_analytic_const_d[count], U_eh_analytic_const_d[count] = get_exciton_screened_potential_q_analytic(q_au=q_au, d_au=d0_au)
+            U_ee_analytic[count], U_hh_analytic[count], U_eh_analytic[count] = get_exciton_screened_potential_q_analytic(q_au=q_au, d_au=d_au)
+            U_ee_analytic_const_d[count], U_hh_analytic_const_d[count], U_eh_analytic_const_d[count] = get_exciton_screened_potential_q_analytic(q_au=q_au, d_au=d0_au)
             #
             _, U_eh_r_analytic_au = get_exciton_screened_potential_r_analytic(r_au=r_au, d_au=d_au)
             U_eh_r_analytic[count] = U_eh_r_analytic_au * Hartree
@@ -222,6 +228,7 @@ def calculate_heterostructure_results(materials_e,materials_h,e_avg_vec_iso,h_av
         E_b_heat_mat=E_b_heat_mat, E_b_analytic_heat_mat=E_b_analytic_heat_mat, E_b_analytic_const_d_heat_mat=E_b_analytic_const_d_heat_mat,
         E_b_heat_xlabels=E_b_heat_xlabels, E_b_heat_ylabels=E_b_heat_ylabels,
         U_ee=U_ee, U_ee_analytic=U_ee_analytic, U_ee_analytic_const_d=U_ee_analytic_const_d,
+        U_hh=U_hh, U_hh_analytic=U_hh_analytic, U_hh_analytic_const_d=U_hh_analytic_const_d,
         U_eh=U_eh, U_eh_analytic=U_eh_analytic, U_eh_analytic_const_d=U_eh_analytic_const_d,
         U_eh_r=U_eh_r, U_eh_r_analytic=U_eh_r_analytic, U_eh_r_analytic_const_d=U_eh_r_analytic_const_d)
 
@@ -249,4 +256,4 @@ if __name__ == '__main__':
         materials_h=materials_h[iNDEX1:iNDEX2h],e_avg_vec_iso=e_avg_vec_iso[iNDEX1:iNDEX2e],
         h_avg_vec_iso=h_avg_vec_iso[iNDEX1:iNDEX2h], materials=materials,
         material_thicknesses=material_thicknesses,
-        nPadding=0, nFilling=1, use_cache=True)
+        nPadding=0, nFilling=1, use_cache=False)
