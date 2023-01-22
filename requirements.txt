@@ -1,2 +1,3 @@
 qeh
 pandas
+wget
