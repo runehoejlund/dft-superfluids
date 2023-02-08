@@ -1,37 +1,16 @@
-# DFT-project: Exciton Superfluids
-Project for calculating parameters for a more realistic modelling of exciton superfluids in 2D Heterostructures.
+# Ab Initio Modelling of High Temperature Exciton Superfluidity in 2D Heterostructures
+Project for calculating parameters for a more realistic modelling of exciton superfluids in van der Waals Heterostructures.
 
 ## Getting Started
-
-### Overview of Important Directories/Files:
-`hetereostructure_results`: In this directory is the
-- precalculated building-blocks (e.g. `MoS2-chi.npz`, etc.)
-- `hetereostructure_analysis.ipynb`: Notebook for plotting heterostructure results (including in final report)
-- `calculate_hetereostructures.py`: Python file for using qeh for calculating effective potentials, dielectric function etc. for diffferent bilayer combinations of heterostructures. Results are exported as `.npz`-files in the same directory.
-- Precalculated building blocks (bbs) are obtained from the [Van der Waals heterostructures Database](https://cmr.fysik.dtu.dk/vdwh/vdwh.html#dielectric-building-blocks). Go to the `building_blocks` directory and download the bbs as described there.
-
-`wannier_model`: This directory is similar to `./hetereostructure_results`, but it focuses on applying the analytical potential in the Wannier model and compare this with the qeh-model.
-- `hs_wannier_analysis.ipynb`: Notebook for comparing Wannier model with Conti et al. and analytic vs. qeh-/ab initio potential.
-- `hs_wannier_model_analytic.py`: Python file for using analytic exression and qeh for calculating effective potentials, dielectric function etc. for diffferent heterostructure. This file is **very** similar to `calculate_hetereostructures.py`, and the two should probably be combined, such that the `wannier_model` directory is merged with the `./hetereostructure_results` directory. The crucial difference is that `hs_wannier_model_analytic.py` can use the analytic potential in the Wannier-model instead of the qeh-potential. As above, results are exported as `.npz`-files in the same directory. 
-- `hs_wannier_model_analytic_article_masses.py`: Same as above but with article masses instead of qeh masses. Should maybe also be combined with the above.
-- `hs_wannier_model_qeh_article_masses.py`: Same as above but with qeh instead of analytical poential and article masses instead of qeh masses.
-
-`deprecated/structures`: Deprecated for now. Contains structure files for making atoms object to be used in DFT-calculations, if we wish to build our own bbs.
-
-`independent_calulations`: In this directory are all files and directories for making our own independent bbs and obtaining results with these. It has the following subdirectories:
-
-`independent_calulations/eigenvalues_and_building_blocks`: Latest code for calculating our own building blocks (bbs). In the [ReadMe.md](https://github.com/runehoejlund/dft-superfluids/tree/main/independent_calculations/eigenvalues_and_building_blocks) are neat bash script snippets for calculating many bbs in one.
-
-`independent_calulations/hetereostructure`: Completely analogous to the `hetereostructure_results` directory explained above, but this time with our own precalculated bbs. **If you wish to calculate more independent bbs:** To run calculations/analysis with newly calculated bbs you need to copy the new independently calculated bbs from `independent_calulations/eigenvalues_and_building_blocks` into `independent_calulations/hetereostructure/building_blocks` and interpolate the bbs with the script `interpolate_building_blocks.py`. Then you can run `calculate_hetereostructures.py` and plot results in `hetereostructure_analysis.ipynb`.
-
-`independent_calulations/convergence_tests_eigenvalues_and_building_blocks`: Old code for calculating eigenvalues and some files for calculating bbs. Needs cleanup. I've saved the directory in the repo, since the files `convergence_check.py` and `convergence.ipynb` contain the code for making convergence tests of gs calculations which might come in handy.
-
+Go to the `main_results` directory to reproduce the main results of the article. In this directory is also more documentation of the computational methods. Below, we cover how to install necessary dependencies and also list useful commands for convenience.
 
 ### Install dependencies
 You need a virtual environment with GPAW to run calculations. If on NiflHeim, use the `install_gpaw.sh`. Other dependencies are listed in requirements.txt. Run the following command to install the python packages
 ```
 pip install -r requirements.txt
 ```
+
+------------------------------------------------------------
 
 ## Usefull commands specific to the dtu gbar hpc environment
 ### Load in intel compiler module
