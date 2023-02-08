@@ -1,4 +1,8 @@
+from os import path, chdir
+chdir(path.dirname(path.abspath(__file__)))
+
 import numpy as np
+
 #define function that writes values imp and sh files
 def printBiExinp(filename,material,me,mh,so_split_e,so_split_h,loc_e,loc_h,d,QEH,hours=24,cores='40'):
     
@@ -8,7 +12,7 @@ def printBiExinp(filename,material,me,mh,so_split_e,so_split_h,loc_e,loc_h,d,QEH
         logic='T'
         description='_QEH'    
     if QEH==False:
-        logic='F'
+        logic='T' # Set to 'T' to read interaction from .dat file
         description='_analytic'
     fullname='./out/' + material+description+'_MF.inp'
     #write
@@ -40,10 +44,10 @@ def printBiExinp(filename,material,me,mh,so_split_e,so_split_h,loc_e,loc_h,d,QEH
     
     #dictionary for inp-file
     inpParam={ 'filename':material+description+'_MF',
-                'structure': material,
+                'structure': material + description,
                 'job':'MF',
-                'dstep':0.00005,
-                'plotPoints': 60,
+                'dstep':0.00010,
+                'plotPoints': 90,
                 'cores': cores,
                 'logical': logic,
                 'me': me,

@@ -1,0 +1,1 @@
+cp run_all.sh ./out/00_run_all.sh
