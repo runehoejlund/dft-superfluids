@@ -10,6 +10,8 @@ You need a virtual environment with GPAW to run calculations. If on NiflHeim, us
 pip install -r requirements.txt
 ```
 
+The BiEx code package used to solve the gap equation is available from the authors upon reasonable request.
+
 ------------------------------------------------------------
 
 ## Usefull commands specific to the dtu gbar hpc environment
