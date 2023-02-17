@@ -2,7 +2,7 @@
 Project for calculating parameters for a more realistic modelling of exciton superfluids in van der Waals Heterostructures.
 
 ## Getting Started
-Go to the `main_results` directory to reproduce the main results of the article. In this directory is also more documentation of the computational methods. Below, we cover how to install necessary dependencies and also list useful commands for convenience.
+Go to the `main_results` directory to reproduce the main results of the article. In this directory you will also find more documentation on the computational methods. In the text below, we cover how to install necessary dependencies and for convenience we also list useful commands.
 
 ### Install dependencies
 You need a virtual environment with GPAW to run calculations. If on NiflHeim, use the `install_gpaw.sh`. Other dependencies are listed in requirements.txt. Run the following command to install the python packages
