@@ -4,6 +4,7 @@ This directory reproduces the main results of the article. The directories are o
 1. `01-material-selection`
 2. `02-qeh-calculations`
 3. `03-gap-equation`
+The BiEx code package used to solve the gap equation is available from the authors upon reasonable request.
 
 By running all scripts in these directories, we reproduce the results, which are then analysed in the iPython Notebook `./02-qeh-calculations/02-qeh_analysis.ipynb` and the python script: ``.
 

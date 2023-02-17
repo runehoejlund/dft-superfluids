@@ -4,3 +4,4 @@
 cp ./qeh_data*.npz ../03-gap-equation/
 cp ./materials_iso_stable.npz ../03-gap-equation/
 mkdir -p ../03-gap-equation/out
+mkdir -p ../03-gap-equation/plots

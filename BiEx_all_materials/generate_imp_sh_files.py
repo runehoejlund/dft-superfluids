@@ -131,7 +131,7 @@ if __name__ == '__main__':
     e_avg_vec=out['e_avg_vec']
     h_avg_vec=out['h_avg_vec']
     e_avg_vec_iso=e_avg_vec[e_iso]
-    h_avg_vec_iso=e_avg_vec[h_iso]
+    h_avg_vec_iso=h_avg_vec[h_iso]
     Mat_plot_iso=out['Mat_plot_iso']
     d_List=out['d_List']
     out2=np.load('./so_split_extremum-loc.npz')
@@ -140,10 +140,4 @@ if __name__ == '__main__':
     loc_cond_vec=out2['loc_cond_vec']
     loc_val_vec=out2['loc_val_vec']
 
-    #choose materials
-    iNDEX1=0
-    iNDEX2e=-1
-    iNDEX2h=-1
-    #iNDEX2e=len(e_avg_vec_iso)
-    #iNDEX2h=len(h_avg_vec_iso)
-    run_through_materials(loc_cond_vec=loc_cond_vec[iNDEX1:iNDEX2e],loc_val_vec=loc_val_vec[iNDEX1:iNDEX2h],split_cond=split_cond[iNDEX1:iNDEX2e],split_val=split_val[iNDEX1:iNDEX2h],materials_e=materials_e[iNDEX1:iNDEX2e],materials_h=materials_h[iNDEX1:iNDEX2h],e_avg_vec_iso=e_avg_vec_iso[iNDEX1:iNDEX2e],h_avg_vec_iso=h_avg_vec_iso[iNDEX1:iNDEX2h], Mat_plot_iso=Mat_plot_iso,d_List=d_List,nPadding=0, nFilling=1)
+    run_through_materials(loc_cond_vec=loc_cond_vec,loc_val_vec=loc_val_vec,split_cond=split_cond,split_val=split_val,materials_e=materials_e,materials_h=materials_h,e_avg_vec_iso=e_avg_vec_iso,h_avg_vec_iso=h_avg_vec_iso, Mat_plot_iso=Mat_plot_iso,d_List=d_List,nPadding=0, nFilling=1)

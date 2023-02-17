@@ -88,15 +88,15 @@ def make_figure(figname, xmax, N, postfix=''):
     plt.rc('legend', fontsize=SMALL_SIZE)
     # plt.gcf().subplots_adjust(bottom=0.15)
 
-    dens = []
-    densarray = []
-    delta = []
-    condfrac = []
+    _dens = []
+    _densarray = []
+    _delta = []
+    _condfrac = []
 
     filenames = Path('out' + postfix).glob('n-*'+figname+'_MF/DeltaN_MF_iTemp001')
-    names = []
-    bilayers = []
-    E_b = []
+    _names = []
+    _bilayers = []
+    _E_b = []
     for i, filename in enumerate(filenames):
         fn = str(filename)
         # if 'n-H-WSe2_p-H-MoSe2' not in fn:
@@ -105,25 +105,31 @@ def make_figure(figname, xmax, N, postfix=''):
         name = fn.split('/')[1]
         bilayer = ', '.join(name.split('_')[:-2])
         try:
-            E_b.append(vdWH_E_b[vdWH_bilayers.index(bilayer)])
+            _E_b.append(vdWH_E_b[vdWH_bilayers.index(bilayer)])
         except:
             print(bilayer + ' is not in bilayers')
-        bilayers.append(bilayer)
-        names.append(name)
-        dens.append(cutoffdens)
-        densarray.append(densloc)
-        delta.append(deltamax)
-        condfrac.append(cfrac)
+        _bilayers.append(bilayer)
+        _names.append(name)
+        _dens.append(cutoffdens)
+        _densarray.append(densloc)
+        _delta.append(deltamax)
+        _condfrac.append(cfrac)
 
     # plot_index = sorted(range(len(dens)), key=lambda sub: dens[sub])[-N:]
 
-    cutoff_argsort = np.argsort(np.array(dens))[::-1]
-    dens = np.array(dens)[cutoff_argsort]
-    densarray = np.array(densarray)[cutoff_argsort,:]
-    delta = np.array(delta)[cutoff_argsort,:]
-    condfrac = np.array(condfrac)[cutoff_argsort,:]
-    ones = np.ones(densarray.shape[1])
-    names_sorted = list(np.array(names)[cutoff_argsort])
+    cutoff_argsort = np.argsort(np.array(_dens))[::-1]
+    dens_sorted = np.array(_dens)[cutoff_argsort]
+    densarray_sorted = np.array(_densarray)[cutoff_argsort,:]
+    delta_sorted = np.array(_delta)[cutoff_argsort,:]
+    condfrac_sorted = np.array(_condfrac)[cutoff_argsort,:]
+    ones = np.ones(densarray_sorted.shape[1])
+    names_sorted = list(np.array(_names)[cutoff_argsort])
+    bilayers_sorted = np.array(_bilayers)[cutoff_argsort]
+    E_b_sorted = list(np.array(_E_b)[cutoff_argsort])
+
+    np.savez('./gap_eq_data_' + figname + '.npz',
+        bilayers=bilayers_sorted, names=names_sorted, dens=dens_sorted, densarray=densarray_sorted,
+        delta=delta_sorted, condfrac=condfrac_sorted)
 
     fig = plt.figure(figsize=((figw + 380) / ppi, figh / ppi),
                      dpi=ppi, constrained_layout=True)
@@ -135,39 +141,39 @@ def make_figure(figname, xmax, N, postfix=''):
     fig2 = plt.figure(figsize=(figw / ppi, figh / ppi),
                       dpi=ppi)
     ax2 = fig2.add_subplot(1, 1, 1)
-    ax2.fill_between(densarray[0, :]*10000, ones, 0.8*ones, alpha=0.2)
-    ax2.fill_between(densarray[0, :]*10000, 0.2*ones, 0*ones, alpha=0.2)
+    ax2.fill_between(densarray_sorted[0, :]*10000, ones, 0.8*ones, alpha=0.2)
+    ax2.fill_between(densarray_sorted[0, :]*10000, 0.2*ones, 0*ones, alpha=0.2)
 
     linestyles = ['solid', (0, (1,1)), 'dashed', 'dashdot']
     for i, name in enumerate(names_sorted):
-        color = get_color(E_b[i], vmin=vmin, vmax=vmax)
-        cutoff = round(dens[i]*10000,1)
+        color = get_color(E_b_sorted[i], vmin=vmin, vmax=vmax)
+        cutoff = round(dens_sorted[i]*10000,1)
         linestyle = linestyles[i % len(linestyles)]
         if i <= N:
-            label = r'$\mathrm{' + bilayers[i].replace('-H-','\mbox{-}').replace('-T-','\mbox{-}').replace('2','_2') + '}$ (' + str(cutoff) + ')'
-            ax.plot(densarray[i, :]*10000,
-                    delta[i, :]*100,
+            label = r'$\mathrm{' + bilayers_sorted[i].replace('-H-','\mbox{-}').replace('-T-','\mbox{-}').replace('2','_2') + '}$ (' + str(cutoff) + ')'
+            ax.plot(densarray_sorted[i, :]*10000,
+                    delta_sorted[i, :]*100,
                     linestyle=linestyle,
                     color=color,
                     linewidth=1,
                     label=label)
-                    # label=bilayers[i])
-            ax2.plot(densarray[i, :]*10000,
-                     condfrac[i, :],
+                    # label=bilayers_sorted[i])
+            ax2.plot(densarray_sorted[i, :]*10000,
+                     condfrac_sorted[i, :],
                      linestyle=linestyle,
                      color=color,
                      linewidth=1,
                      label=label)
-                    #  label=bilayers[i])
+                    #  label=bilayers_sorted[i])
         else:
-            ax.plot(densarray[i, :]*10000,
-                delta[i, :]*100,
+            ax.plot(densarray_sorted[i, :]*10000,
+                delta_sorted[i, :]*100,
                 color=color,
                 linestyle='dashed',
                 linewidth=0.5)
 
-            ax2.plot(densarray[i, :]*10000,
-                    condfrac[i, :],
+            ax2.plot(densarray_sorted[i, :]*10000,
+                    condfrac_sorted[i, :],
                     color=color,
                     linestyle='dashed',
                     linewidth=0.5)
